@@ -1,0 +1,57 @@
+<h1>Generating Buildings From Footprints</h1>
+
+<p><img src="images/screenshot2.jpg" alt="" title="" /></p>
+
+<p>This is a collection of scrips i have written for extracting buildings from building footprints, for a project in the Computer Graphics course at KTH 2014.</p>
+
+<p>It is written in C# for Unity 3D.</p>
+
+<h1>How it works</h1>
+
+<p>It uses <a href="http://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/moore.html">Moores-Neighbor Tracing</a>
+to get all the boundary points of the footprint, then constructs a plane from them, and drags it out into the 3rd dimmension.</p>
+
+<p>But it is not good to simply cunstruct a plane directly from these points, so I use another method to eliminate the <em>non-importan</em> points.</p>
+
+<h2>Eliminating Boundary Points</h2>
+
+<p>Using Moores-Neighbor tracing algorithm we have an ordered list of boundary points.
+Now we want to pick out the most <em>important</em> points, from which we will construct a plane.
+This is the hard part and might be hard to follow.</p>
+
+<p>Let <em>Pn</em> and <em>Pm</em> be two boundary points <em>n &lt; m</em>, meaning <em>Pn</em> comes before <em>Pm</em> in the ordered list of boundary points.</p>
+
+<p>Let <em>L = Line(Pn,Pm)</em> be a line between the points <em>Pn</em> and <em>Pm</em>, and <em>distance(Pi, L)</em> be the distance between the line <em>L</em> and some random boundary point <em>Pi</em>.</p>
+
+<p>Now we can define the function <em>errorsum(Pn, Pm)</em> as
+<em>errorsum(Pn,Pm) = distance(Pn+1, L)+distance(Pn+2,L)+...+distance(Pm-2,L)+distance(Pm-1,L)</em></p>
+
+<p><img src="images/illustration.jpg" alt="" title="" /></p>
+
+<p>In this image <em>p1</em> and <em>p2</em> are <em>Pn</em> and <em>Pm</em>, <em>d1</em> to <em>d3</em> are <em>Pn+1</em> to <em>Pm-1</em>, <em>L</em> is <em>Line(Pn,Pm)</em> and the red lines are <em>distance(Pi, L)</em></p>
+
+<p>Now to pick out the most important points pick a value for the threshold, e.g. 7, and do the following</p>
+
+<ol>
+<li>Pick the first point and call it <em>P1</em>.</li>
+<li>Define the next <em>good</em> point, <em>P1</em> as the last point in the list for which it holds that <em>errorsum(P1,P2) &lt;= threshold</em></li>
+<li>Add <em>P1</em> to the list of <em>good points</em></li>
+<li>Rename <em>P2</em> to <em>P1</em>.</li>
+<li>Repeat from <em>2.</em> until you hit the end of boundary points.</li>
+</ol>
+
+<p>Now we have a list of <em>good points</em> from which we can construct a plane, add some walls and a roof and <em>* * poof * *</em> it's a building.</p>
+
+<h1>Result</h1>
+
+<p>This is an example of a building footprint map:</p>
+
+<p><img src="images/great_map.gif" alt="" title="" /></p>
+
+<p>This was the result</p>
+
+<p><img src="images/screenshot4.jpg" alt="" title="" /></p>
+
+<p>And this is the effect of different values for the threshold</p>
+
+<p><img src="images/examples.jpg" alt="" title="" /></p>
