@@ -10,7 +10,7 @@ It is written in C# for Unity 3D.
 
 # How it works
 
-It uses [Moores-Neighbor Tracing](http://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/moore.html)
+It uses [Moores-Neighbor Tracing algorithm](http://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/moore.html)
 to get all the boundary points of the footprint, then constructs a plane from them, and drags it out into the 3rd dimmension.
 
 But it is not good to simply cunstruct a plane directly from these points, so I use another method to eliminate the *non-importan* points.
@@ -18,11 +18,11 @@ But it is not good to simply cunstruct a plane directly from these points, so I 
 Eliminating Boundary Points
 ---------------------------
 
-Using Moores-Neighbor tracing algorithm we have an ordered list of boundary points.
+From using the Moores-Neighbor tracing algorithm we get an ordered list of boundary points.
 Now we want to pick out the most *important* points, from which we will construct a plane.
-This is the hard part and might be hard to follow.
+This is the hard part and might be a little tough to follow.
 
-Let *Pn* and *Pm* be two boundary points *n < m*, meaning *Pn* comes before *Pm* in the ordered list of boundary points.
+Let *Pn* and *Pm* be two boundary points where *n < m*, meaning *Pn* comes before *Pm* in the ordered list of boundary points.
 
 Let *L = Line(Pn,Pm)* be a line between the points *Pn* and *Pm*, and *distance(Pi, L)* be the distance between the line *L* and some random boundary point *Pi*.
 
@@ -43,7 +43,7 @@ In this image *p1* and *p2* are *Pn* and *Pm*, *d1* to *d3* are *Pn+1* to *Pm-1*
 Now to pick out the most important points pick a value for the threshold, e.g. 7, and do the following
 
 1. Pick the first point and call it *P1*.
-2. Define the next *good* point, *P1* as the last point in the list for which it holds that *errorsum(P1,P2) <= threshold*
+2. Define the next *good* point, *P2*, as the last point in the list for which it holds that *errorsum(P1,P2) <= threshold*
 3. Add *P1* to the list of *good points*
 4. Rename *P2* to *P1*.
 5. Repeat from *2.* until you hit the end of boundary points.
@@ -51,19 +51,21 @@ Now to pick out the most important points pick a value for the threshold, e.g. 7
 
 Now we have a list of *good points* from which we can construct a plane, add some walls and a roof and ** * poof * ** it's a building.
 
-# Result
+# Results
 
 This is an example of a building footprint map:
 
 ![](images/great_map.gif)
 
-This was the result
+After extraction we get this city!
 
 ![](images/screenshot4.jpg)
 
 And this is the effect of different values for the threshold
 
 ![](images/examples.jpg)
+
+You can see that the lower the threshold is the more points we get in our plane.
 
 # Problems
 
